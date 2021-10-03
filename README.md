@@ -56,3 +56,5 @@ e2eb06d8af82: Mounted from library/alpine
 1.0: digest: sha256:eda4bcb3e0c8b1fdb84f341d639e25b3fb17203c32fa2c3ab67870961d75f1ea size: 946
  192  ~/workspace/go-docker   master ●  
 ```
+## Tips
+To get faster use `./publish-new-image.sh <image-version>`
