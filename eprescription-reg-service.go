@@ -6,13 +6,16 @@ import (
 	"encoding/json"
 	"github.com/google/uuid"
 	"os"
+	"strconv"
 )
+const SERVICE_VERSION="4.0"
+const SERVICE_PORT=8081
 
 func main() {
 	http.HandleFunc("/ep-registration-service/health", handleHealthFunc)
 	http.HandleFunc("/ep-registration-service/registrations", handleRegistrationFunc)
-	log.Printf("HTTP Go Server is Listening on  %s : 8081",getHostName())
-	log.Fatal(http.ListenAndServe(":8081", nil))
+	log.Printf("HTTP Go Server is Listening on  %s : %d",getHostName(),SERVICE_PORT)
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(SERVICE_PORT), nil))
 }
 
 func handleHealthFunc(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +28,7 @@ func handleRegistrationFunc(w http.ResponseWriter, r *http.Request) {
 	response := make(map[string]string)
 	response["registrationId"] = registerUser()
 	response["processingNode"] = getHostName()
+	response["serviceVersion"] = SERVICE_VERSION
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		log.Fatalf("JSON marshalling error : %s", err)
