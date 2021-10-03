@@ -24,6 +24,7 @@ func handleRegistrationFunc(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Request received from %s", r.RemoteAddr)
 	response := make(map[string]string)
 	response["registrationId"] = registerUser()
+	response["processingNode"] = getHostName()
 	jsonResponse, err := json.Marshal(response)
 	if err != nil {
 		log.Fatalf("JSON marshalling error : %s", err)
@@ -31,7 +32,7 @@ func handleRegistrationFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(jsonResponse)
-	log.Printf("Returning %d", http.StatusCreated)
+	log.Printf("Returning %d from node %s", http.StatusCreated,getHostName())
 }
 func registerUser() string {
 	// add data base logic here
