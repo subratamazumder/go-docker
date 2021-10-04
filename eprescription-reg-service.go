@@ -1,20 +1,22 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
-	"encoding/json"
-	"github.com/google/uuid"
 	"os"
 	"strconv"
+
+	"github.com/google/uuid"
 )
-const SERVICE_VERSION="4.0"
-const SERVICE_PORT=8081
+
+const SERVICE_VERSION = "6.0"
+const SERVICE_PORT = 8081
 
 func main() {
 	http.HandleFunc("/ep-registration-service/health", handleHealthFunc)
 	http.HandleFunc("/ep-registration-service/registrations", handleRegistrationFunc)
-	log.Printf("HTTP Go Server is Listening on  %s : %d",getHostName(),SERVICE_PORT)
+	log.Printf("HTTP Go Server is Listening on  %s : %d", getHostName(), SERVICE_PORT)
 	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(SERVICE_PORT), nil))
 }
 
@@ -36,13 +38,13 @@ func handleRegistrationFunc(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusCreated)
 	w.Write(jsonResponse)
-	log.Printf("Returning %d from node %s", http.StatusCreated,getHostName())
+	log.Printf("Returning %d from node %s", http.StatusCreated, getHostName())
 }
 func registerUser() string {
 	// add data base logic here
 	return uuid.New().String()
 }
-func getHostName() string{
+func getHostName() string {
 	name, err := os.Hostname()
 	if err != nil {
 		panic(err)
