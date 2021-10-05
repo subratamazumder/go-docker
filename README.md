@@ -3,7 +3,9 @@
 ```
 go run eprescription-reg-service.go
 curl -is http://0.0.0.0:8081/ep-registration-service/health
-curl -X POST -is http://0.0.0.0:8081/ep-registration-service/registrations
+curl -X POST -is http://0.0.0.0:8081/ep-registration-service/registrations \
+   -H "Content-Type: application/json" \
+   -d '{"firstName": "cyano", "lastName": "mazumder"}'
  ~/workspace/go-docker   master  go run eprescription-reg-service.go
 2021/10/03 02:00:48 HTTP Go Server is Listening on  192.168.1.101 : 8081
 2021/10/03 02:00:54 Request received from 127.0.0.1:59138
