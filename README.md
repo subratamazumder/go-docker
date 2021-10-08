@@ -1,4 +1,6 @@
 # Go Docker
+## Description
+Sample REST API using Golang HTTP module that stores data into DynamoDB
 ## Test In Local
 ```
 go run eprescription-reg-service.go
