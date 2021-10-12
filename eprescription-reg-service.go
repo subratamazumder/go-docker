@@ -15,7 +15,7 @@ import (
 	"github.com/google/uuid"
 )
 
-const SERVICE_VERSION = "7.0"
+const SERVICE_VERSION = "12.0"
 const SERVICE_PORT = 8081
 const DYNAMO_USER_PROFILE_TABLE = "eprescription-user-profile"
 
@@ -28,17 +28,29 @@ func main() {
 
 func handleHealthFunc(w http.ResponseWriter, r *http.Request) {
 	log.Printf("Request received from %s", r.RemoteAddr)
+	w.Header().Add("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Headers", "*")
+	w.Header().Add("Access-Control-Allow-Methods", "GET,OPTIONS")
 	w.WriteHeader(http.StatusOK)
 	log.Printf("Returning %d", http.StatusOK)
 }
+func setupCORSHeaderResponse(w *http.ResponseWriter, req *http.Request) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+    (*w).Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+    (*w).Header().Set("Access-Control-Allow-Headers", "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
+}
 func handleRegistrationFunc(w http.ResponseWriter, r *http.Request) {
+	//for browser client
+	setupCORSHeaderResponse(&w,r)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
 	log.Printf("Request received from %s", r.RemoteAddr)
 	statusCode := http.StatusCreated
 	response := make(map[string]string)
 	response["processingNode"] = getHostName()
 	response["serviceVersion"] = SERVICE_VERSION
 	w.Header().Add("Content-Type", "application/json; charset=utf-8")
-
 	var regRequest RegistrationRequest
 	body, err := ioutil.ReadAll(r.Body)
 	if err = json.Unmarshal(body, &regRequest); err != nil {
